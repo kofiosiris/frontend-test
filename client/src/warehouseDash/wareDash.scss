@@ -1,0 +1,17 @@
+.ware_home {
+  display: flex;
+
+  .ware_container {
+    flex: 6;
+
+    .ware_widgets {
+      display: flex;
+      //   background-color: grey;
+
+      .ware_widget {
+        height: 200px !important;
+        background-color: yellow;
+      }
+    }
+  }
+}

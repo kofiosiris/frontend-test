@@ -1,0 +1,143 @@
+.delivery__section {
+  /* height: 90vh; */
+  /* background: yellowgreen; */
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3rem;
+  /* align-items: center; */
+  gap: 5rem;
+}
+
+.plane__container {
+  margin-top: 5rem;
+}
+
+.ship__container {
+  margin-top: 5rem;
+}
+
+.plane__img {
+  height: 20rem;
+  width: 35rem;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.ship__img {
+  height: 20rem;
+  width: 35rem;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.plane__title {
+  margin-top: 20px;
+  margin-left: 10px;
+  font-weight: 500;
+  color: #006400;
+}
+
+.ship__title {
+  margin-top: 20px;
+  margin-left: 10px;
+  font-weight: 500;
+  color: #006400;
+}
+
+.plane__desc {
+  margin-left: 10px;
+  color: grey;
+  font-weight: 200;
+  font-size: 20px;
+}
+
+.ship__desc {
+  margin-left: 10px;
+  color: grey;
+  font-weight: 200;
+  font-size: 20px;
+}
+
+.plane__button {
+  margin-left: 10px;
+  margin-top: 10px;
+  border: none;
+  background: lime;
+  padding: 10px 25px;
+  border-radius: 5px;
+  font-weight: 500;
+  font-size: 20px;
+  color: beige;
+}
+
+.ship__button {
+  margin-left: 10px;
+  margin-top: 10px;
+  border: none;
+  background: lime;
+  padding: 10px 25px;
+  border-radius: 5px;
+  font-weight: 500;
+  font-size: 20px;
+  color: beige;
+}
+
+@media (max-width: 900px) {
+  .delivery__section {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+    /* margin-top: 20rem; */
+    align-items: center;
+    /* justify-content: start; */
+    overflow-y: hidden;
+    /* height: 20vh; */
+    gap: 0;
+  }
+
+  .plane__title {
+    font-size: 20px;
+  }
+
+  .plane__desc {
+    font-size: 15px;
+  }
+
+  .ship__title {
+    font-size: 20px;
+  }
+
+  .ship__desc {
+    font-size: 15px;
+  }
+}
+
+@media only screen and (max-width: 1201px) and (min-width: 904px) {
+  .delivery__section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    /* width: 90%; */
+  }
+
+  .plane__container {
+    /* background: red; */
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media only screen and (max-width: 1307px) and (min-width: 1203px) {
+  .delivery__section {
+    gap: 1rem;
+  }
+  .plane__card {
+    margin-left: 10px;
+  }
+
+  .plane__container {
+    display: flex;
+    justify-content: center;
+  }
+}
