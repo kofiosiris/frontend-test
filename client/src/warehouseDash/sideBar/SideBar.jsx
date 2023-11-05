@@ -13,59 +13,78 @@ import SettingsSystemDaydreamOutlinedIcon from "@mui/icons-material/SettingsSyst
 import PsychologyOutlinedIcon from "@mui/icons-material/PsychologyOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { logout, reset } from "../../features/auth/authSlice";
+import { useDispatch } from "react-redux";
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const logoutHandler = () => {
-    localStorage.removeItem("userToken");
-    navigate("/login");
+    try {
+      dispatch(logout());
+      dispatch(reset());
+      navigate("/login");
+    } catch (error) {
+      console.error("An error occured: ", error);
+    }
   };
   return (
     <div className="WareSidebar">
       <div className="WareTop">
-        <span className="logo">JUNE</span>
+        <Link to="/">
+          <span className="logo">JUNE</span>
+        </Link>
       </div>
       <hr />
       <div className="center">
         <ul className="dash_links">
           <p className="title">MAIN</p>
-          <li>
-            <DashboardIcon className="icon" />
-            <span>Dashboard</span>
-          </li>
+          <Link to="/warehouse/dash">
+            <li>
+              <DashboardIcon className="icon" />
+              <span>Dashboard</span>
+            </li>
+          </Link>
           <p className="title">LISTS</p>
-          <li>
-            <PersonOutlineIcon className="icon" />
-            <span>Users</span>
-          </li>
-          <li>
-            <StoreIcon className="icon" />
-            <span>Products</span>
-          </li>
+          <Link to="/warehouse/dash/customers">
+            <li>
+              <PersonOutlineIcon className="icon" />
+              <span>Customers</span>
+            </li>
+          </Link>
+          <Link to="/warehouse/dash/products">
+            <li>
+              <StoreIcon className="icon" />
+              <span>Products</span>
+            </li>
+          </Link>
           <li>
             <CreditCardIcon className="icon" />
             <span>Orders</span>
           </li>
-          <li>
-            <LocalShippingIcon className="icon" />
-            <span>Delivery</span>
-          </li>
+          <Link to="/warehouse/dash/shipments">
+            <li>
+              <LocalShippingIcon className="icon" />
+              <span>Shipments</span>
+            </li>
+          </Link>
           <p className="title">USEFUL</p>
           <li>
             <SettingsApplicationsIcon className="icon" />
             <span>Settings</span>
           </li>
           <p className="title">USER</p>
-          <li>
-            <AccountCircleOutlinedIcon className="icon" />
-            <span>Profile</span>
-          </li>
-          <li>
+          <Link to="/user/warehouse/profile">
+            <li>
+              <AccountCircleOutlinedIcon className="icon" />
+              <span>Profile</span>
+            </li>
+          </Link>
+          <li onClick={logoutHandler}>
             <ExitToAppIcon className="icon" />
-            <span onClick={logoutHandler}>Logout</span>
+            <span>Logout</span>
           </li>
         </ul>
       </div>

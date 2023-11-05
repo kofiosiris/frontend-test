@@ -1,7 +1,7 @@
 import "./login.css";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import AuthHeader from "../../components/authHeader/AuthHeader";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,9 +14,8 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { userLogin } from "../../features/authActions";
+import { login, reset, updateUserRole } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 
 function Copyright(props) {
@@ -42,20 +41,66 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function Login() {
-  const { loading, error, userInfo } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
+  // const { loading, error, user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm();
+  const dispatch = useDispatch();
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const { email, password } = formData;
+
+  const { user, role, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
 
   useEffect(() => {
-    if (userInfo) {
-      navigate("/warehouse/dash");
-    }
-  }, [navigate, userInfo]);
+    const storedUserRole = localStorage.getItem("userRole");
 
-  const submitForm = (data) => {
-    dispatch(userLogin(data));
+    if (storedUserRole) {
+      // const userRoleObject = JSON.parse(storedUserRole);
+      dispatch(updateUserRole(storedUserRole));
+    }
+    if (isSuccess || user) {
+      if (role && role.includes("WAREHOUSE_CLERK")) {
+        navigate("/warehouse/dash");
+      } else if (role && role.includes("CUSTOMER")) {
+        navigate("/customer/dash");
+      } else if (role && role.includes("COURIER")) {
+        navigate("/courier/dash");
+      } else if (role && role.includes("ADMIN")) {
+        navigate("/admin");
+      } else {
+        navigate("/unauthorized");
+      }
+    }
+
+    dispatch(reset());
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
+
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const userData = {
+      email,
+      password,
+    };
+
+    dispatch(login(userData));
+  };
+
+  // if (isLoading) {
+  //   return <Spinner />;
+  // }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -77,9 +122,9 @@ export default function Login() {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit(submitForm)}
             noValidate
             sx={{ mt: 1 }}
+            onSubmit={handleSubmit}
           >
             <TextField
               margin="normal"
@@ -89,7 +134,8 @@ export default function Login() {
               label="Email Address"
               name="email"
               autoComplete="email"
-              {...register("email")}
+              value={email}
+              onChange={onChange}
               autoFocus
             />
             <TextField
@@ -100,8 +146,9 @@ export default function Login() {
               label="Password"
               type="password"
               id="password"
+              value={password}
+              onChange={onChange}
               autoComplete="current-password"
-              {...register("password")}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -113,7 +160,7 @@ export default function Login() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              {isLoading ? "Signing In" : "Sign In"}
             </Button>
             <Grid container>
               <Grid item xs>
@@ -122,17 +169,27 @@ export default function Login() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link to="/customer/register" variant="body2">
+                  {"Are you signing up for a Customer Account?"}
+                </Link>
+                <br />
+                <Link to="/courier/register" variant="body2">
+                  {"Are you signing up for a Courier Account?"}
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
+        {message && (
+          <div className="form-group">
+            <div className="alert alert-danger" role="alert">
+              {message}
+            </div>
+          </div>
+        )}
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
   );
 }
-
 // export default Login;

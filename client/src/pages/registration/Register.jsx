@@ -1,9 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
 import "./register.css";
 import AuthHeader from "../../components/authHeader/AuthHeader";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../../features/authActions"; // Adjust the path to your authActions.js file
 
 function Register() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    fullName: "",
+    username: "",
+    email: "",
+    phoneNumber: "",
+    password: "",
+    confirmPassword: "",
+    gender: ""
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    // Dispatch the registerUser action
+    try {
+      await dispatch(registerUser(formData));
+      alert("Registration successful!");
+      // Redirect or perform other actions as needed
+      navigate("/products"); // Redirect to the Product page
+    } catch (error) {
+      alert("Error during registration: " + error);
+    }
+  };
+
   return (
     <div className="registration__body">
       <div className="register__page">
@@ -16,58 +57,54 @@ function Register() {
               <Link to="/login">Click here to Login</Link>
             </span>
           </div>
-          <form action="#">
-            <div class="user-details">
-              <div class="input-box">
-                <span class="details">Full Name</span>
-                <input type="text" placeholder="Enter your name" required />
+          <form onSubmit={handleSubmit}>
+            <div className="user-details">
+              <div className="input-box">
+                <span className="details">Full Name</span>
+                <input type="text" name="fullName" placeholder="Enter your name" onChange={handleChange} required />
               </div>
-              <div class="input-box">
-                <span class="details">Username</span>
-                <input type="text" placeholder="Enter your username" required />
+              <div className="input-box">
+                <span className="details">Username</span>
+                <input type="text" name="username" placeholder="Enter your username" onChange={handleChange} required />
               </div>
-              <div class="input-box">
-                <span class="details">Email</span>
-                <input type="text" placeholder="Enter your email" required />
+              <div className="input-box">
+                <span className="details">Email</span>
+                <input type="email" name="email" placeholder="Enter your email" onChange={handleChange} required />
               </div>
-              <div class="input-box">
-                <span class="details">Phone Number</span>
-                <input type="text" placeholder="Enter your number" required />
+              <div className="input-box">
+                <span className="details">Phone Number</span>
+                <input type="text" name="phoneNumber" placeholder="Enter your number" onChange={handleChange} required />
               </div>
-              <div class="input-box">
-                <span class="details">Password</span>
-                <input type="text" placeholder="Enter your password" required />
+              <div className="input-box">
+                <span className="details">Password</span>
+                <input type="password" name="password" placeholder="Enter your password" onChange={handleChange} required />
               </div>
-              <div class="input-box">
-                <span class="details">Confirm Password</span>
-                <input
-                  type="text"
-                  placeholder="Confirm your password"
-                  required
-                />
+              <div className="input-box">
+                <span className="details">Confirm Password</span>
+                <input type="password" name="confirmPassword" placeholder="Confirm your password" onChange={handleChange} required />
               </div>
             </div>
-            <div class="gender-details">
-              <input type="radio" name="gender" id="dot-1" />
-              <input type="radio" name="gender" id="dot-2" />
-              <input type="radio" name="gender" id="dot-3" />
-              <span class="gender-title">Gender</span>
-              <div class="category">
-                <label for="dot-1">
-                  <span class="dot one"></span>
-                  <span class="gender">Male</span>
+            <div className="gender-details">
+              <input type="radio" name="gender" value="Male" id="dot-1" onChange={handleChange} />
+              <input type="radio" name="gender" value="Female" id="dot-2" onChange={handleChange} />
+              <input type="radio" name="gender" value="Prefer not to say" id="dot-3" onChange={handleChange} />
+              <span className="gender-title">Gender</span>
+              <div className="category">
+                <label htmlFor="dot-1">
+                  <span className="dot one"></span>
+                  <span className="gender">Male</span>
                 </label>
-                <label for="dot-2">
-                  <span class="dot two"></span>
-                  <span class="gender">Female</span>
+                <label htmlFor="dot-2">
+                  <span className="dot two"></span>
+                  <span className="gender">Female</span>
                 </label>
-                <label for="dot-3">
-                  <span class="dot three"></span>
-                  <span class="gender">Prefer not to say</span>
+                <label htmlFor="dot-3">
+                  <span className="dot three"></span>
+                  <span className="gender">Prefer not to say</span>
                 </label>
               </div>
             </div>
-            <div class="button">
+            <div className="button">
               <input type="submit" value="Register" />
             </div>
           </form>

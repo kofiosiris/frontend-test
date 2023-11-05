@@ -15,7 +15,6 @@ function Delivery() {
           <p className="plane__desc">
             Customers have the option to Deliver their packages by air.
           </p>
-          <button className="plane__button">Select</button>
         </div>
       </div>
       <div className="ship__container">
@@ -29,7 +28,6 @@ function Delivery() {
           <p className="ship__desc">
             Customers have the option to Deliver their packages by sea.
           </p>
-          <button className="ship__button">Select</button>
         </div>
       </div>
     </div>

@@ -9,6 +9,7 @@ import {
   RouterProvider,
   Route,
   Link,
+  Navigate,
 } from "react-router-dom";
 import Home from "./pages/home/Home";
 import { MantineProvider } from "@mantine/core";
@@ -31,7 +32,31 @@ import store from "./app/store";
 import PartnerRegister from "./pages/warehouseAuth/register/PartnerRegister";
 import WareDash from "./warehouseDash/WareDash";
 import { ChakraProvider } from "@chakra-ui/react";
-import Products from "./pages/ProductPage/Products";
+import Products from "./pages/ProductPage/addNewProduct/Products";
+import ViewProducts from "./pages/ProductPage/viewProducts/ViewProducts";
+import AddShip from "./pages/shipments/AddShip/AddShip";
+import Label from "./pages/shipments/ShippingLabel/Label";
+import ViewShipment from "./pages/shipments/ViewShip/ViewShipment";
+import ProductEmail from "./pages/ProductPage/ViewByEmail/ProductEmail";
+import ViewCust from "./pages/customer/viewCustomers/ViewCust";
+import CustRegister from "./pages/customer/register/CustRegister";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import UnAuthorized from "./components/unAuthorized/UnAuthorized";
+import RegisterCourier from "./pages/courier/register/RegisterCourier";
+import ProfilePage from "./pages/warehouse/profilePage/ProfilePage";
+import Customer from "./pages/customer/customerDash/Customer";
+import Courier from "./pages/courier/courierDash/Courier";
+
+// const root = ReactDOM.createRoot(document.getElementById("root"));
+// root.render(
+//   <React.StrictMode>
+//     <Provider store={store}>
+//       <App />
+//     </Provider>
+//   </React.StrictMode>
+// );
+
+// const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
 const router = createBrowserRouter([
   {
@@ -83,7 +108,9 @@ const router = createBrowserRouter([
     path: "warehouse/dash",
     element: (
       <div>
-        <WareDash />
+        <ProtectedRoute allowedRoles={["WAREHOUSE_CLERK"]}>
+          <WareDash />
+        </ProtectedRoute>
       </div>
     ),
   },
@@ -91,8 +118,58 @@ const router = createBrowserRouter([
     path: "warehouse/dash/products",
     element: (
       <div>
-        <Products />
+        <ProtectedRoute allowedRoles={["WAREHOUSE_CLERK"]}>
+          <Products />
+        </ProtectedRoute>
       </div>
+    ),
+  },
+  {
+    path: "warehouse/dash/products/viewProducts",
+    element: (
+      <ProtectedRoute allowedRoles={["WAREHOUSE_CLERK"]}>
+        <ViewProducts />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "warehouse/dash/products/viewProducts/email",
+    element: (
+      <ProtectedRoute allowedRoles={["WAREHOUSE_CLERK"]}>
+        <ProductEmail />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "warehouse/dash/shipments",
+    element: (
+      <ProtectedRoute allowedRoles={["WAREHOUSE_CLERK"]}>
+        <AddShip />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "warehouse/dash/shipments/label",
+    element: (
+      <ProtectedRoute allowedRoles={["WAREHOUSE_CLERK"]}>
+        <Label />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "warehouse/dash/shipments/view",
+    element: (
+      <ProtectedRoute allowedRoles={["WAREHOUSE_CLERK"]}>
+        <ViewShipment />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "warehouse/dash/customers",
+    element: (
+      <ProtectedRoute allowedRoles={["WAREHOUSE_CLERK"]}>
+        <ViewCust />
+      </ProtectedRoute>
     ),
   },
   {
@@ -109,7 +186,9 @@ const router = createBrowserRouter([
     path: "admin",
     element: (
       <div>
-        <Admin />
+        <ProtectedRoute allowedRoles={["ADMIN"]}>
+          <Admin />
+        </ProtectedRoute>
       </div>
     ),
   },
@@ -117,7 +196,9 @@ const router = createBrowserRouter([
     path: "admin/users",
     element: (
       <div>
-        <List />
+        <ProtectedRoute allowedRoles={["ADMIN"]}>
+          <List />
+        </ProtectedRoute>
       </div>
     ),
   },
@@ -125,7 +206,9 @@ const router = createBrowserRouter([
     path: "admin/users/:id",
     element: (
       <div>
-        <Single />
+        <ProtectedRoute allowedRoles={["ADMIN"]}>
+          <Single />
+        </ProtectedRoute>
       </div>
     ),
   },
@@ -133,7 +216,9 @@ const router = createBrowserRouter([
     path: "admin/users/new",
     element: (
       <div>
-        <New inputs={userInputs} title="Add New User" />
+        <ProtectedRoute allowedRoles={["ADMIN"]}>
+          <New inputs={userInputs} title="Add New User" />
+        </ProtectedRoute>
       </div>
     ),
   },
@@ -141,7 +226,61 @@ const router = createBrowserRouter([
     path: "admin/users/products/new",
     element: (
       <div>
-        <New inputs={productInputs} title="Add New Product" />
+        <ProtectedRoute allowedRoles={["ADMIN"]}>
+          <New inputs={productInputs} title="Add New Product" />
+        </ProtectedRoute>
+      </div>
+    ),
+  },
+  {
+    path: "customer/register",
+    element: (
+      <div>
+        <CustRegister />
+      </div>
+    ),
+  },
+  {
+    path: "courier/register",
+    element: (
+      <div>
+        <RegisterCourier />
+      </div>
+    ),
+  },
+  {
+    path: "/unauthorized",
+    element: (
+      <div>
+        <UnAuthorized />
+      </div>
+    ),
+  },
+  {
+    path: "/user/warehouse/profile",
+    element: (
+      <div>
+        <ProfilePage />
+      </div>
+    ),
+  },
+  {
+    path: "customer/dash",
+    element: (
+      <div>
+        <ProtectedRoute allowedRoles={["CUSTOMER"]}>
+          <Customer />
+        </ProtectedRoute>
+      </div>
+    ),
+  },
+  {
+    path: "courier/dash",
+    element: (
+      <div>
+        <ProtectedRoute allowedRoles={["COURIER"]}>
+          <Courier />
+        </ProtectedRoute>
       </div>
     ),
   },

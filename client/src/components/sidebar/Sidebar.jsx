@@ -13,13 +13,29 @@ import SettingsSystemDaydreamOutlinedIcon from "@mui/icons-material/SettingsSyst
 import PsychologyOutlinedIcon from "@mui/icons-material/PsychologyOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { logout, reset } from "../../features/auth/authSlice";
+import { useDispatch } from "react-redux";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const logoutHandler = () => {
+    try {
+      dispatch(logout());
+      dispatch(reset());
+      navigate("/login");
+    } catch (error) {
+      console.error("An error occured: ", error);
+    }
+  };
   return (
     <div className="sidebar">
       <div className="top">
-        <span className="logo">JUNE</span>
+        <Link to="/">
+          <span className="logo">JUNE</span>
+        </Link>
       </div>
       <hr />
       <div className="center">
@@ -34,10 +50,12 @@ const Sidebar = () => {
             <PersonOutlineIcon className="icon" />
             <span>Users</span>
           </li>
-          <li>
-            <StoreIcon className="icon" />
-            <span>Products</span>
-          </li>
+          <Link to="warehouse/dash/products">
+            <li>
+              <StoreIcon className="icon" />
+              <span>Products</span>
+            </li>
+          </Link>
           <li>
             <CreditCardIcon className="icon" />
             <span>Orders</span>
@@ -73,7 +91,7 @@ const Sidebar = () => {
             <AccountCircleOutlinedIcon className="icon" />
             <span>Profile</span>
           </li>
-          <li>
+          <li onClick={logoutHandler}>
             <ExitToAppIcon className="icon" />
             <span>Logout</span>
           </li>

@@ -17,14 +17,15 @@
       align-items: center;
       border: 0.5px solid lightgray;
       border-radius: 5px;
+      padding: 6px;
       //   padding: 3px;
 
       .input__search {
         border: none;
         outline: none;
         background: transparent;
-        width: auto !important;
-        height: 5px !important;
+        // width: auto !important;
+        // height: 30px !important;
 
         &::placeholder {
           font-size: 15px;

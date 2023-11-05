@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.61356602.css",
+    "main.js": "/static/js/main.8b7a6098.js",
+    "static/media/JUNE-LOGO-2.jpg": "/static/media/JUNE-LOGO-2.298e566d62e20283c812.jpg",
+    "index.html": "/index.html",
+    "main.61356602.css.map": "/static/css/main.61356602.css.map",
+    "main.8b7a6098.js.map": "/static/js/main.8b7a6098.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.61356602.css",
+    "static/js/main.8b7a6098.js"
+  ]
+}

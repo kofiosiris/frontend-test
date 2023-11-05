@@ -1,0 +1,60 @@
+.add_label {
+  display: flex;
+  width: 100%;
+
+  .addLabel_container {
+    flex: 6;
+    // background-color: grey;
+
+    .top {
+      -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+      padding: 10px;
+      margin: 20px;
+      display: flex;
+
+      h1 {
+        color: lightgray;
+      }
+    }
+
+    .labelData {
+      -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+      padding: 10px;
+      margin: 20px;
+      display: flex;
+      flex-direction: column;
+      //   background: grey;
+
+      .productDetails {
+        display: flex;
+        flex-direction: column;
+
+        .labelInput {
+          border: 1px solid grey;
+          padding: 6px;
+          width: 150px;
+        }
+      }
+    }
+
+    .fetch_button {
+      width: 150px;
+      padding: 10px;
+      border: none;
+      background-color: teal;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .labelInfo {
+      margin-top: 20px;
+      gap: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}

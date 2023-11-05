@@ -6,7 +6,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
+import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -17,7 +17,8 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { registerUser } from "../../../features/authActions";
+import { register, reset } from "../../../features/auth/authSlice";
+import axios from "axios";
 
 function Copyright(props) {
   return (
@@ -42,30 +43,58 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function PartnerRegister() {
-  const { loading, userInfo, error, success } = useSelector(
-    (state) => state.auth
-  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm();
 
-  const submitForm = (data) => {
-    // check if passwords match
-    // if (data.password !== data.confirmPassword) {
-    //   alert("Password mismatch");
-    // }
-    // transform email string to lowercase to avoid case sensitivity issues in login
-    data.email = data.email.toLowerCase();
-    dispatch(registerUser(data));
-    console.log(data);
-  };
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    role: "",
+    phoneNumber: "",
+    password: "",
+  });
+
+  const { firstname, lastname, email, role, phoneNumber, password } = formData;
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
 
   useEffect(() => {
-    // redirect user to login page if registration was successful
-    if (success) navigate("/login");
-    // redirect authenticated user to profile screen
-    if (userInfo) navigate("/warehouse/dash");
-  }, [navigate, userInfo, success]);
+    if (isSuccess || user) {
+      navigate("/login");
+    }
+    dispatch(reset());
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
+
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    const userData = {
+      firstname,
+      lastname,
+      email,
+      role,
+      phoneNumber,
+      password,
+    };
+
+    try {
+      dispatch(register(userData));
+      //  console.log(userData);
+      navigate("/login");
+    } catch (error) {
+      console.error("Registration error: ", error);
+    }
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -86,22 +115,18 @@ export default function PartnerRegister() {
             WareHouse Partner Registration
           </Typography>
 
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit(submitForm)}
-            sx={{ mt: 3 }}
-          >
+          <Box component="form" noValidate onSubmit={onSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  autoComplete="given-name"
-                  name="firstName"
+                  autoComplete="lastName"
+                  name="firstname"
                   required
                   fullWidth
-                  id="firstname"
+                  id="firstName"
                   label="First Name"
-                  {...register("firstname")}
+                  value={firstname}
+                  onChange={onChange}
                   autoFocus
                 />
               </Grid>
@@ -112,8 +137,9 @@ export default function PartnerRegister() {
                   id="lastname"
                   label="Last Name"
                   name="lastname"
-                  {...register("lastname")}
-                  autoComplete="family-name"
+                  value={lastname}
+                  onChange={onChange}
+                  autoComplete="lastName"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -123,7 +149,8 @@ export default function PartnerRegister() {
                   id="email"
                   label="Email Address"
                   name="email"
-                  {...register("email")}
+                  value={email}
+                  onChange={onChange}
                   autoComplete="email"
                 />
               </Grid>
@@ -134,8 +161,10 @@ export default function PartnerRegister() {
                   id="role"
                   label="Role"
                   name="role"
-                  {...register("role")}
+                  value={role}
+                  onChange={onChange}
                   autoComplete="role"
+                  placeholder="WAREHOUSE_CLERK"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -145,7 +174,8 @@ export default function PartnerRegister() {
                   id="phone"
                   label="Phone Number"
                   name="phoneNumber"
-                  {...register("phoneNumber")}
+                  value={phoneNumber}
+                  onChange={onChange}
                   autoComplete="phone-number"
                 />
               </Grid>
@@ -157,7 +187,8 @@ export default function PartnerRegister() {
                   label="Password"
                   type="password"
                   id="password"
-                  {...register("password")}
+                  value={password}
+                  onChange={onChange}
                   autoComplete="new-password"
                 />
               </Grid>
@@ -192,7 +223,7 @@ export default function PartnerRegister() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link to="/login" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
